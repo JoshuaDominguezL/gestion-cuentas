@@ -11,12 +11,26 @@ router.get('/', async (req, res) => {
         c.nombre,
         c.notas,
         c.creado_en,
-        COALESCE(SUM(CASE WHEN d.pagado = 0 THEN d.monto ELSE 0 END), 0) AS total_pendiente,
-        COALESCE(SUM(d.monto), 0) AS total_historico,
-        COUNT(CASE WHEN d.pagado = 0 THEN 1 END) AS items_pendientes
+        (COALESCE(d.total_cargos, 0) - COALESCE(a.total_abonos, 0)) AS total_pendiente,
+        COALESCE(d.total_historico, 0) AS total_historico,
+        COALESCE(d.items_pendientes, 0) AS items_pendientes
       FROM clientes c
-      LEFT JOIN deudas d ON c.id = d.cliente_id
-      GROUP BY c.id
+      LEFT JOIN (
+        SELECT 
+          cliente_id,
+          SUM(CASE WHEN pagado = 0 THEN monto ELSE 0 END) AS total_cargos,
+          SUM(monto) AS total_historico,
+          COUNT(CASE WHEN pagado = 0 THEN 1 END) AS items_pendientes
+        FROM deudas
+        GROUP BY cliente_id
+      ) d ON c.id = d.cliente_id
+      LEFT JOIN (
+        SELECT 
+          cliente_id,
+          SUM(monto) AS total_abonos
+        FROM abonos
+        GROUP BY cliente_id
+      ) a ON c.id = a.cliente_id
       ORDER BY total_pendiente DESC, c.nombre ASC
     `);
     res.json({ ok: true, data: rows });

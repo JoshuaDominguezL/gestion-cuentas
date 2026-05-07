@@ -40,7 +40,7 @@ export default function App() {
       if (idx >= 0) { const a = [...prev]; a[idx] = { ...a[idx], ...cliente }; return a; }
       return [{ ...cliente, total_pendiente: 0, items_pendientes: 0 }, ...prev];
     });
-    showToast('✓ Cliente guardado');
+    showToast('Cliente guardado');
   }
 
   async function eliminar() {
@@ -49,7 +49,7 @@ export default function App() {
       await clientesAPI.delete(confirmDel.id);
       setClientes(prev => prev.filter(c => c.id !== confirmDel.id));
       setConfirmDel(null);
-      showToast('✓ Cliente eliminado');
+      showToast('Cliente eliminado');
     } catch (e) { setError(e.message); }
     finally { setDelLoading(false); }
   }
@@ -82,9 +82,9 @@ export default function App() {
 
       {/* Stats globales */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14, marginBottom: 32 }}>
-        <GlobalStat label="Deuda total pendiente" value={formatCurrency(totalGlobal)} icon="💰" color="var(--accent)" />
-        <GlobalStat label="Clientes con deuda" value={conDeuda} icon="👥" color="var(--red)" />
-        <GlobalStat label="Total clientes" value={clientes.length} icon="📋" color="var(--blue)" />
+        <GlobalStat label="Deuda total pendiente" value={formatCurrency(totalGlobal)} color="var(--accent)" />
+        <GlobalStat label="Clientes con deuda" value={conDeuda}color="var(--red)" />
+        <GlobalStat label="Total clientes" value={clientes.length}color="var(--blue)" />
       </div>
 
       {/* Barra de acciones */}
@@ -113,8 +113,8 @@ export default function App() {
         <div style={{ display: 'flex', justifyContent: 'center', padding: 64 }}><Spinner size={36} /></div>
       ) : filtered.length === 0 ? (
         search
-          ? <Empty icon="🔍" title="Sin resultados" desc={`No se encontró ningún cliente con "${search}"`} />
-          : <Empty icon="👥" title="Sin clientes aún" desc='Haz clic en "+ Nuevo cliente" para comenzar' />
+          ? <Empty title="Sin resultados" desc={`No se encontró ningún cliente con "${search}"`} />
+          : <Empty title="Sin clientes aún" desc='Haz clic en "+ Nuevo cliente" para comenzar' />
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {filtered.map((c, i) => (
@@ -150,12 +150,10 @@ function Header() {
   return (
     <div style={{ marginBottom: 32 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6 }}>
-        <div style={{ width: 40, height: 40, background: 'var(--accent)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>💼</div>
         <h1 style={{ fontFamily: 'var(--font-head)', fontSize: 28, fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.5px' }}>
           Cuentas del Negocio
         </h1>
       </div>
-      <p style={{ fontSize: 14, color: 'var(--text3)', marginLeft: 52 }}>Gestión de deudas y cuentas de clientes</p>
     </div>
   );
 }
