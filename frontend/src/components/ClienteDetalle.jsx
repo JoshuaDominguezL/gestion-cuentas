@@ -202,7 +202,7 @@ function AbonoRow({ abono, onDelete }) {
 
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: 14, fontWeight: 500, color: 'var(--text)', marginBottom: 2 }}>
-          Abono recibido {abono.notas && <span style={{ fontWeight: 400, color: 'var(--text3)', fontSize: 12 }}>— {abono.notas}</span>}
+          Abono recibido
         </div>
         <div style={{ fontSize: 12, color: 'var(--text3)' }}>
           📅 {formatDate(abono.fecha_registro)}

@@ -3,14 +3,14 @@ import { Modal, Btn, Input, Textarea, Alert, todayISO } from './UI.jsx';
 import { abonosAPI } from '../api.js';
 
 export default function AbonoForm({ open, onClose, clienteId, clienteNombre, onSaved }) {
-  const [form, setForm] = useState({ monto: '', fecha_registro: todayISO(), notas: '' });
+  const [form, setForm] = useState({ monto: '', fecha_registro: todayISO() });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState('');
 
   useEffect(() => {
     if (open) {
-      setForm({ monto: '', fecha_registro: todayISO(), notas: '' });
+      setForm({ monto: '', fecha_registro: todayISO() });
       setErrors({});
       setApiError('');
     }
@@ -51,9 +51,6 @@ export default function AbonoForm({ open, onClose, clienteId, clienteNombre, onS
         <Input label="FECHA DEL ABONO *" type="date"
           value={form.fecha_registro} onChange={e => setForm(f => ({ ...f, fecha_registro: e.target.value }))}
           error={errors.fecha_registro} />
-
-        <Textarea label="NOTAS / COMENTARIO" placeholder="Opcional..."
-          value={form.notas} onChange={e => setForm(f => ({ ...f, notas: e.target.value }))} />
 
         <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', paddingTop: 4 }}>
           <Btn variant="ghost" onClick={onClose}>Cancelar</Btn>

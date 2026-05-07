@@ -36,7 +36,7 @@ router.get('/', async (req, res) => {
 
 // POST crear abono
 router.post('/', async (req, res) => {
-  const { cliente_id, monto, fecha_registro, notas } = req.body;
+  const { cliente_id, monto, fecha_registro } = req.body;
   if (!cliente_id) return res.status(400).json({ ok: false, error: 'El cliente es requerido' });
   if (!monto || isNaN(monto) || Number(monto) <= 0)
     return res.status(400).json({ ok: false, error: 'El monto debe ser mayor a 0' });
@@ -44,8 +44,8 @@ router.post('/', async (req, res) => {
   try {
     const fecha = fecha_registro || new Date().toISOString().slice(0, 10);
     const [result] = await pool.query(
-      'INSERT INTO abonos (cliente_id, monto, fecha_registro, notas) VALUES (?, ?, ?, ?)',
-      [cliente_id, Number(monto), fecha, notas || null]
+      'INSERT INTO abonos (cliente_id, monto, fecha_registro) VALUES (?, ?, ?)',
+      [cliente_id, Number(monto), fecha]
     );
     const [rows] = await pool.query(
       `SELECT a.*, c.nombre AS cliente_nombre FROM abonos a JOIN clientes c ON c.id = a.cliente_id WHERE a.id = ?`,
